@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+CURDIR=$(pwd)
 TMPDIR=$(mktemp -d /tmp/genbootstrap.XXXXXX)
 VERSION=$(date +%Y.%m.%d)
 
@@ -21,9 +22,7 @@ for arch in x86_64; do
   setarch ${arch} -- pacstrap -C "${TMPDIR}"/pacman.conf -c -d -G -M "${TMPDIR}"/root.${arch}/ arch-install-scripts systemd
   rm "${TMPDIR}"/root.${arch}/var/lib/pacman/sync/*
   cp "$(dirname "$0")"/README "${TMPDIR}"/root.${arch}/
-  (cd "${TMPDIR}"; bsdtar -cf - root.${arch} | gzip -9 > "${TMPDIR}"/archlinux-bootstrap-${VERSION}-${arch}.tar.gz)
+  (cd "${TMPDIR}"; bsdtar -cf - root.${arch} | gzip -9 > "${CURDIR}"/archlinux-bootstrap-${VERSION}-${arch}.tar.gz)
   rm -rf "${TMPDIR}"/root.${arch}
 done
-rm "${TMPDIR}"/pacman.conf
-
-echo "Files are in ${TMPDIR}."
+rm -rf "${TMPDIR}"
