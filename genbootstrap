@@ -16,7 +16,7 @@ Include = /etc/pacman.d/mirrorlist
 [community]
 Include = /etc/pacman.d/mirrorlist
 EOF
-for arch in i686 x86_64; do
+for arch in x86_64; do
   mkdir "${TMPDIR}"/root.${arch}
   setarch ${arch} -- pacstrap -C "${TMPDIR}"/pacman.conf -c -d -G -M "${TMPDIR}"/root.${arch}/ arch-install-scripts systemd
   rm "${TMPDIR}"/root.${arch}/var/lib/pacman/sync/*
